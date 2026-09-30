@@ -51,7 +51,7 @@ button:disabled { cursor: not-allowed; }
 
 .brand-script { font-family: "Lobster", cursive; color: var(--primary); text-shadow: 0 0 16px color-mix(in oklch, var(--primary) 55%, transparent); }
 .header-glow { box-shadow: 0 2px 15px color-mix(in oklch, var(--primary) 17%, transparent); }
-.hero-watermark { font-size: clamp(6rem, 13vw, 12rem); font-weight: 800; line-height: 1; color: oklch(0.96 0.004 85 / 0.055); pointer-events: none; user-select: none; letter-spacing: -0.06em; }
+.hero-watermark { font-size: clamp(3rem, 9vw, 8rem); font-weight: 800; line-height: 1; color: oklch(0.96 0.004 85 / 0.055); pointer-events: none; user-select: none; white-space: nowrap; }
 .upload-panel { background: linear-gradient(140deg, oklch(0.18 0.004 85 / .95), oklch(0.145 0.004 85 / .95)); border: 1px solid var(--border); }
 .upload-drop { background: oklch(0.21 0.006 85 / .5); border: 1px dashed oklch(0.38 0.018 85); }
 .upload-drop:hover, .upload-drop.dragging { border-color: var(--primary); background: oklch(0.27 0.025 90 / .3); }
@@ -63,6 +63,14 @@ button:disabled { cursor: not-allowed; }
 .project-card:hover { border-color: var(--gold-muted); transform: translateY(-2px); }
 .tool-circle { border: 1px solid var(--border); background: var(--secondary); color: var(--gold-muted); transition: background .2s, color .2s, border-color .2s; }
 .group:hover .tool-circle, .tool-circle.active { background: var(--accent); color: var(--primary); border-color: var(--gold-muted); }
+.tool-marquee-track { animation: tool-conveyor 28s linear infinite; }
+.tool-marquee:hover .tool-marquee-track, .tool-marquee:focus-within .tool-marquee-track { animation-play-state: paused; }
+@keyframes tool-conveyor { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .tool-marquee { overflow-x: auto; }
+  .tool-marquee-track { animation: none; }
+  .tool-marquee-duplicate { display: none; }
+}
 .editor-backdrop { background: oklch(0.06 0 0 / .82); backdrop-filter: blur(8px); }
 .editor-surface { background: var(--card); border: 1px solid var(--border); box-shadow: 0 30px 90px oklch(0 0 0 / .6); }
 .editor-preview { background: oklch(0.07 0 0); }
