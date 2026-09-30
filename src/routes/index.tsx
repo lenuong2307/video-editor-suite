@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowDownToLine, ArrowLeft, AudioLines, Captions, Check, ChevronDown, Clapperboard,
-  Clock3, CloudUpload, Crown, FileVideo, Film, FolderOpen, Home, Link2, Loader2,
-  Menu, MoreHorizontal, Music2, Pause, Pencil, Play, Plus, Scissors, Settings2,
-  Sparkles, Star, Trash2, Upload, Volume2, WandSparkles, X,
+  ArrowDownToLine, ArrowLeft, AudioLines, Captions, Clapperboard,
+  CloudUpload, Crown, FileVideo, FolderOpen, Home, Loader2,
+  Menu, Music2, Pause, Pencil, Play, Scissors, Settings2,
+  Sparkles, Star, Trash2, Volume2, X,
 } from "lucide-react";
 import yoga from "@/assets/sample-yoga.jpg";
 import gym from "@/assets/sample-gym.jpg";
@@ -52,14 +52,16 @@ function Index() {
   const [notice, setNotice] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const uploadedUrls = useRef<Set<string>>(new Set());
   const showNotice = (text: string) => { setNotice(text); window.setTimeout(() => setNotice(""), 4000); };
 
-  useEffect(() => () => { projects.forEach(p => { if (p.src.startsWith("blob:")) URL.revokeObjectURL(p.src); }); }, [projects]);
+  useEffect(() => { const urls = uploadedUrls.current; return () => { urls.forEach(url => URL.revokeObjectURL(url)); }; }, []);
 
   function addFiles(files: FileList | File[]) {
     const videos = Array.from(files).filter(f => f.type.startsWith("video/"));
     if (!videos.length) { showNotice("Vui lòng chọn tệp video để tải lên."); return; }
     const incoming = videos.map(f => ({ id: crypto.randomUUID(), name: f.name.replace(/\.[^/.]+$/, ""), src: URL.createObjectURL(f), kind: "video" as const }));
+    incoming.forEach(item => uploadedUrls.current.add(item.src));
     setProjects(prev => [...incoming, ...prev]); if (incoming[0]) setActive(incoming[0]);
   }
   function fromUrl() {
@@ -176,7 +178,7 @@ function Index() {
               <Button variant="subtle" size="icon" className="absolute inset-0 m-auto size-8 rounded-full bg-card/80 text-primary" aria-label={`Mở ${item.name}`} onClick={() => setActive(item)}><Play className="fill-current" /></Button>
               <Button variant="subtle" size="icon" className="absolute right-1 top-1 size-6 rounded-full bg-card/80" aria-label={starred.includes(item.id) ? "Bỏ lưu" : "Lưu dự án"} onClick={() => toggleStar(item.id)}><Star className={`size-3 ${starred.includes(item.id) ? "fill-current text-primary" : ""}`} /></Button>
             </div>
-            <div className="flex items-start justify-between gap-1 px-2 py-2"><div className="min-w-0"><p className="truncate text-[10px] font-bold" title={item.name}>{item.name}</p><p className="mt-1 text-[9px] text-muted-foreground">Vừa tải lên · Bản nháp</p></div><Button variant="subtle" size="icon" className="size-5 shrink-0" aria-label={`Xóa ${item.name}`} onClick={() => { setProjects(prev => prev.filter(p => p.id !== item.id)); if (item.src.startsWith("blob:")) URL.revokeObjectURL(item.src); }}><Trash2 className="size-3" /></Button></div>
+            <div className="flex items-start justify-between gap-1 px-2 py-2"><div className="min-w-0"><p className="truncate text-[10px] font-bold" title={item.name}>{item.name}</p><p className="mt-1 text-[9px] text-muted-foreground">Vừa tải lên · Bản nháp</p></div><Button variant="subtle" size="icon" className="size-5 shrink-0" aria-label={`Xóa ${item.name}`} onClick={() => { setProjects(prev => prev.filter(p => p.id !== item.id)); if (item.src.startsWith("blob:")) { URL.revokeObjectURL(item.src); uploadedUrls.current.delete(item.src); } }}><Trash2 className="size-3" /></Button></div>
           </div>)}
           {tab !== "all" && !visibleProjects.length && <p className="col-span-full py-8 text-center text-xs text-muted-foreground">Chưa có dự án nào trong mục này.</p>}
         </div>
