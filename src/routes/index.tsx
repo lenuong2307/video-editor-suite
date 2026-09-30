@@ -60,7 +60,7 @@ function Index() {
     const videos = Array.from(files).filter(f => f.type.startsWith("video/"));
     if (!videos.length) { showNotice("Vui lòng chọn tệp video để tải lên."); return; }
     const incoming = videos.map(f => ({ id: crypto.randomUUID(), name: f.name.replace(/\.[^/.]+$/, ""), src: URL.createObjectURL(f), kind: "video" as const }));
-    setProjects(prev => [...incoming, ...prev]); setActive(incoming[0]);
+    setProjects(prev => [...incoming, ...prev]); if (incoming[0]) setActive(incoming[0]);
   }
   function fromUrl() {
     const value = url.trim();
@@ -131,8 +131,8 @@ function Index() {
 
       <section id="features" className="mt-9 sm:mt-8">
         <h2 className="text-center text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Được hỗ trợ bởi AI</h2>
-        <div className="mx-auto mt-4 flex max-w-[1050px] flex-wrap justify-center gap-x-5 gap-y-5 sm:gap-x-6">
-          {tools.map((tool, i) => <div key={`${tool.label}-${i}`} className="group flex w-[72px] flex-col items-center gap-2 text-center sm:w-[77px]" title={tool.label}>
+        <div className="mx-auto mt-4 flex max-w-[900px] flex-wrap justify-center gap-x-3 gap-y-5 sm:gap-x-3">
+          {tools.map((tool, i) => <div key={`${tool.label}-${i}`} className="group flex w-[65px] flex-col items-center gap-2 text-center sm:w-[63px]" title={tool.label}>
             <div className="tool-circle grid size-10 place-items-center rounded-full"><tool.icon size={17} strokeWidth={1.8} /></div>
             <span className="text-[9px] font-bold leading-tight text-foreground/80">{tool.label}</span>
           </div>)}

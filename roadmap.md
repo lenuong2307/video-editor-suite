@@ -1,3 +1,3 @@
 - [x] Recreate the reference home screen and its dark-gold visual language.
 - [x] Add usable import, sample selection, project filters, and local editing controls.
-- [ ] Verify desktop/mobile layout and interactions in browser.
+- [x] Verify desktop/mobile layout and interactions in browser.
