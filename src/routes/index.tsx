@@ -14,9 +14,9 @@ import fitness from "@/assets/sample-fitness.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
-    { title: "Clips — Biến video dài thành video ngắn" },
+    { title: "Master Clip — Biến video dài thành video ngắn" },
     { name: "description", content: "Không gian tạo và chỉnh sửa video ngắn: tải video lên, khám phá mẫu, cắt ghép và xuất video." },
-    { property: "og:title", content: "Clips — Biến video dài thành video ngắn" },
+    { property: "og:title", content: "Master Clip — Biến video dài thành video ngắn" },
     { property: "og:description", content: "Tạo video ngắn từ video của bạn trong một không gian chỉnh sửa trực quan." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
@@ -85,7 +85,7 @@ function Index() {
   return <div className="min-h-screen bg-background text-foreground">
     <header className="header-glow relative z-10 flex min-h-14 items-center justify-between gap-4 border-b border-border px-4 sm:px-7">
       <div className="flex min-w-0 items-center gap-4 sm:gap-5">
-        <a href="/" className="brand-script shrink-0 text-3xl sm:text-4xl">Clips</a>
+        <a href="/" className="brand-script shrink-0 text-3xl sm:text-4xl">Master Clip</a>
         <span className="hidden truncate text-xs font-bold sm:block">Video dài → Nhiều Short</span>
       </div>
       <span className="hidden text-xs font-semibold text-foreground/80 lg:block">Thời Gian · Thu Nhập · Tự Do</span>
@@ -107,7 +107,7 @@ function Index() {
 
     <main className="mx-auto max-w-[1110px] px-4 pb-24">
       <section className="relative flex flex-col items-center pt-1 text-center sm:pt-0">
-        <div className="hero-watermark absolute left-1/2 top-8 -translate-x-1/2">Clipsale</div>
+        <div className="hero-watermark absolute left-1/2 top-8 -translate-x-1/2">Master Clip</div>
         <div className="relative z-[1] mt-2 w-full max-w-[340px]">
           <h1 className="text-sm font-bold sm:text-base">Biến video thô thành content viral — tự động, bằng AI.</h1>
           <p className="mt-4 text-xs font-medium text-muted-foreground">Kéo thả video dài — AI quét và đề xuất đoạn hay nhất.</p>
@@ -133,11 +133,15 @@ function Index() {
 
       <section id="features" className="mt-9 sm:mt-8">
         <h2 className="text-center text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Được hỗ trợ bởi AI</h2>
-        <div className="mx-auto mt-4 flex max-w-[900px] flex-wrap justify-center gap-x-3 gap-y-5 sm:gap-x-3">
-          {tools.map((tool, i) => <div key={`${tool.label}-${i}`} className="group flex w-[65px] flex-col items-center gap-2 text-center sm:w-[63px]" title={tool.label}>
-            <div className="tool-circle grid size-10 place-items-center rounded-full"><tool.icon size={17} strokeWidth={1.8} /></div>
-            <span className="text-[9px] font-bold leading-tight text-foreground/80">{tool.label}</span>
-          </div>)}
+        <div className="tool-marquee mx-auto mt-4 max-w-[900px] overflow-hidden" aria-label="Công cụ AI">
+          <div className="tool-marquee-track flex w-max">
+            {[0, 1].map(copy => <div key={copy} className={`tool-marquee-group flex shrink-0 gap-3 pr-3 ${copy === 1 ? "tool-marquee-duplicate" : ""}`} aria-hidden={copy === 1 ? true : undefined}>
+              {tools.map((tool, i) => <div key={`${tool.label}-${i}`} className="group flex w-[65px] shrink-0 flex-col items-center gap-2 text-center" title={tool.label}>
+                <div className="tool-circle grid size-10 place-items-center rounded-full"><tool.icon size={17} strokeWidth={1.8} /></div>
+                <span className="text-[9px] font-bold leading-tight text-foreground/80">{tool.label}</span>
+              </div>)}
+            </div>)}
+          </div>
         </div>
       </section>
 
@@ -184,7 +188,7 @@ function Index() {
         </div>
       </section>
     </main>
-    <Button variant="tool" size="icon" className="fixed bottom-4 left-4 z-20 size-11 rounded-full border-gold-muted text-primary shadow-xl" aria-label="Góp ý" title="Góp ý" onClick={() => showNotice("Cảm ơn bạn đã sử dụng Clips!")}><Pencil /></Button>
+    <Button variant="tool" size="icon" className="fixed bottom-4 left-4 z-20 size-11 rounded-full border-gold-muted text-primary shadow-xl" aria-label="Góp ý" title="Góp ý" onClick={() => showNotice("Cảm ơn bạn đã sử dụng Master Clip!")}><Pencil /></Button>
     {notice && <div role="status" className="fixed bottom-5 left-1/2 z-50 w-max max-w-[90vw] -translate-x-1/2 rounded-md border border-border bg-card px-4 py-3 text-xs shadow-xl">{notice}</div>}
     {active && <Editor key={active.id} media={active} onClose={() => setActive(null)} onNotice={showNotice} />}
   </div>;
@@ -234,7 +238,7 @@ function Editor({ media, onClose, onNotice }: { media: Media; onClose: () => voi
     const recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 2500000 });
     const chunks: Blob[] = [];
     recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
-    recorder.onstop = () => { const blob = new Blob(chunks, { type: "video/webm" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${media.name.replace(/[^a-z0-9-_\u00C0-\u1EF9]/gi, "-")}-clips.webm`; a.click(); window.setTimeout(() => URL.revokeObjectURL(a.href), 60000); stream.getTracks().forEach(t => t.stop()); setExporting(false); onNotice("Đã xuất video WebM (chưa gồm âm thanh)."); };
+    recorder.onstop = () => { const blob = new Blob(chunks, { type: "video/webm" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${media.name.replace(/[^a-z0-9-_\u00C0-\u1EF9]/gi, "-")}-master-clip.webm`; a.click(); window.setTimeout(() => URL.revokeObjectURL(a.href), 60000); stream.getTracks().forEach(t => t.stop()); setExporting(false); onNotice("Đã xuất video WebM (chưa gồm âm thanh)."); };
     try {
       if (video) { video.pause(); video.currentTime = start; await new Promise<void>(resolve => { if (Math.abs(video.currentTime - start) < .1 && video.readyState >= 2) resolve(); else video.addEventListener("seeked", () => resolve(), { once: true }); }); video.muted = true; video.playbackRate = speed; await video.play(); }
       recorder.start();

@@ -9,5 +9,6 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- Keep the Clips workspace as a browser-first editor: local uploads and direct media URLs stay in memory, because no cloud storage is connected.
+- Keep the Master Clip workspace as a browser-first editor: local uploads and direct media URLs stay in memory, because no cloud storage is connected.
 - Keep all visual palette and reusable surface treatments in `src/styles.css`, because the interface follows one dark-and-gold design system.
+- Keep the AI tool strip as a duplicated, CSS-driven marquee with reduced-motion fallback, because it must loop smoothly without losing accessibility.

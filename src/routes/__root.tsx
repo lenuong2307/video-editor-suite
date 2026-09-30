@@ -77,9 +77,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Clips — Video dài thành video ngắn" },
+      { title: "Master Clip — Video dài thành video ngắn" },
       { name: "description", content: "Tạo và chỉnh sửa video ngắn từ video của bạn." },
-      { property: "og:title", content: "Clips — Video dài thành video ngắn" },
+      { property: "og:title", content: "Master Clip — Video dài thành video ngắn" },
       { property: "og:description", content: "Tạo và chỉnh sửa video ngắn từ video của bạn." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
