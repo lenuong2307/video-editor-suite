@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the Clips workspace as a browser-first editor: local uploads and direct media URLs stay in memory, because no cloud storage is connected.
+- Keep all visual palette and reusable surface treatments in `src/styles.css`, because the interface follows one dark-and-gold design system.
